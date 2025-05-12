@@ -42,6 +42,22 @@ public class CountryController {
         return ResponseEntity.ok(country);
     }
 
+    private ResponseEntity<?> validation(BindingResult result){
+        Map<String, String> errors= new HashMap<>();
+
+        result.getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), "El campo " + error.getField() + " " + error.getDefaultMessage());
+        });
+        return ResponseEntity.badRequest().body(errors);
+    }
+    
+    @PostMapping
+    public ResponseEntity<?> create(@Valid @RequestBody Country country, BindingResult result) {
+        if (result.hasFieldErrors()) {
+            return validation(result);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(countryService.save(country));
+    }
     
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Country country) {
