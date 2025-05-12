@@ -41,7 +41,7 @@ public class CountryController {
                 .orElseThrow(() -> new EntityNotFoundException("Error: el país no existe"));
         return ResponseEntity.ok(country);
     }
-
+    // add validation in countries
     private ResponseEntity<?> validation(BindingResult result){
         Map<String, String> errors= new HashMap<>();
 
